@@ -1,0 +1,12 @@
+{
+    "on": {
+        "brightness": 50,
+        "contrast": 65,
+        "gamma": 2.15
+    },
+    "off": {
+        "brightness": 50,
+        "contrast": 50,
+        "gamma": 1.00
+    }
+}
