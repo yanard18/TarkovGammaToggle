@@ -1,3 +1,3 @@
 @echo off
 cd /d "%~dp0"
-venv\Scripts\python.exe set_nvcp_colors.py off
+venv\Scripts\python.exe fast_gamma.py off
