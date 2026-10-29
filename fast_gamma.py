@@ -26,8 +26,6 @@ from ctypes import wintypes
 from pathlib import Path
 
 PROFILE_PATH = Path(__file__).with_name("profile.json")
-# Only touch displays driven by this adapter (the laptop's Intel panel is left alone).
-ADAPTER_MATCH = "NVIDIA"
 
 DISPLAY_DEVICE_ATTACHED_TO_DESKTOP = 0x1
 
@@ -76,7 +74,8 @@ def target_displays():
         device.cb = ctypes.sizeof(device)
         if not user32.EnumDisplayDevicesW(None, index, ctypes.byref(device), 0):
             return
-        if device.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP and ADAPTER_MATCH in device.DeviceString:
+        # Every active monitor, whichever GPU (NVIDIA or Intel) drives it.
+        if device.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP:
             yield device.DeviceName
         index += 1
 
@@ -88,7 +87,7 @@ def main():
 
     displays = list(target_displays())
     if not displays:
-        sys.exit(f"No active display found on an adapter matching '{ADAPTER_MATCH}'")
+        sys.exit("No active display found")
 
     failed = False
     for name in displays:
